@@ -1,0 +1,22 @@
+# etl_pipeline.py
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+# Initialize Spark Session
+spark = SparkSession.builder \
+    .appName("ETL Pipeline Optimization") \
+    .getOrCreate()
+
+# Load data
+data = spark.read.csv("s3://path_to_data.csv", header=True, inferSchema=True)
+print("Data loaded successfully")
+
+# Data transformation
+transformed_data = data.select(col("feature1"), col("feature2"), col("target"))
+print("Data transformation completed")
+
+# Save transformed data
+transformed_data.write.parquet("s3://path_to_output/")
+print("Data written to output location")
+
+spark.stop()
